@@ -1,12 +1,21 @@
 <script setup>
 import { ref } from 'vue'
 import Gallery from "./components/Gallery.vue";
+import GalleryImage from "./components/GalleryImage.vue";
+import GalleryVideo from "./components/GalleryVideo.vue";
+import GalleryAudio from "./components/GalleryAudio.vue";
+const components = ref({
+  image: GalleryImage,
+  video: GalleryVideo,
+  audio: GalleryAudio
+})
 
 const galleries = ref([
   {
     title: 'Beispielgalerie A',
     description: 'Ein kurzer Beschreibungstext',
     items: [
+      { type: 'audio', src: 'https://soundcloud.com/dadaanteportas-music/hush?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing', description: "Der Beschreibungstext zur Audio"},
       { type: 'image', src: 'https://unsplash.it/640/425?hash=a1', description: "Der Beschreibungstext zum Bild"},
       { type: 'image', src: 'https://unsplash.it/640/425?hash=b1', description: "Der Beschreibungstext zum Bild"},
       { type: 'image', src: 'https://unsplash.it/640/425?hash=c1', description: "Der Beschreibungstext zum Bild"},
@@ -52,8 +61,16 @@ const galleries = ref([
         v-for="gallery in galleries"
         :title="gallery.title"
         :description="gallery.description"
-        :items="gallery.items"
-    />
+    >
+      <component
+          v-for="item in gallery.items"
+          :key="item.src"
+          :is="components[item.type]"
+          :src="item.src"
+          :description="item.description"
+      />
+    </Gallery>
+
   </div>
 </template>
 
